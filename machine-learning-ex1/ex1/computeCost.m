@@ -14,7 +14,10 @@ J = 0;
 %               You should set J to the cost.
 
 
-
+h = theta' * X';
+diff = h' - y; %' transpose(h) minus y
+square = (diff .^ 2);
+J = (0.5 / m) * sum(sum(square));
 
 
 % =========================================================================
