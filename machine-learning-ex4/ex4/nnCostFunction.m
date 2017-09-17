@@ -88,6 +88,12 @@ term1 = yVec .* log(h);
 term2 = (1 - yVec) .* log(1 - h);
 J = (-1) * sum(sum(term1 + term2)) / m;
 
+% Regularization
+% Do not regularize the terms that correspond to the bias (1st column of each theta matrix)
+Theta1Reg = Theta1(1:end, 2:end); % exclude 1st column
+Theta2Reg = Theta2(1:end, 2:end); % exclude 1st column
+regTerm = (lambda / (2 * m)) * (sum(sum(Theta1Reg .^ 2)) + sum(sum(Theta2Reg .^ 2)));
+J = J + regTerm;
 
 
 
