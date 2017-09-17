@@ -8,8 +8,8 @@ function [J grad] = nnCostFunction(nn_params, ...
 %   [J grad] = NNCOSTFUNCTON(nn_params, hidden_layer_size, num_labels, ...
 %   X, y, lambda) computes the cost and gradient of the neural network. The
 %   parameters for the neural network are "unrolled" into the vector
-%   nn_params and need to be converted back into the weight matrices. 
-% 
+%   nn_params and need to be converted back into the weight matrices.
+%
 %   The returned parameter grad should be a "unrolled" vector of the
 %   partial derivatives of the neural network.
 %
@@ -24,8 +24,8 @@ Theta2 = reshape(nn_params((1 + (hidden_layer_size * (input_layer_size + 1))):en
 
 % Setup some useful variables
 m = size(X, 1);
-         
-% You need to return the following variables correctly 
+
+% You need to return the following variables correctly
 J = 0;
 Theta1_grad = zeros(size(Theta1));
 Theta2_grad = zeros(size(Theta2));
@@ -46,12 +46,12 @@ Theta2_grad = zeros(size(Theta2));
 %         that your implementation is correct by running checkNNGradients
 %
 %         Note: The vector y passed into the function is a vector of labels
-%               containing values from 1..K. You need to map this vector into a 
+%               containing values from 1..K. You need to map this vector into a
 %               binary vector of 1's and 0's to be used with the neural network
 %               cost function.
 %
 %         Hint: We recommend implementing backpropagation using a for-loop
-%               over the training examples if you are implementing it for the 
+%               over the training examples if you are implementing it for the
 %               first time.
 %
 % Part 3: Implement regularization with the cost function and gradients.
@@ -63,6 +63,30 @@ Theta2_grad = zeros(size(Theta2));
 %
 
 
+% Part 1
+% size(Theta1) = [25 401]
+% size(Theta2) = [10 26]
+% size(y) = [m 1]
+
+X = [ones(m, 1), X];
+z1 = X * Theta1'; %' size(z) = [m 25]
+a1 = sigmoid(z1); % size(a1) = [m 25]
+a1 = [ones(m, 1), a1]; % size(a1) = [m 26]
+z2 = a1 * Theta2'; %' size(z2) = [m 10]
+a2 = sigmoid(z2); % size(a2) = [m 10]
+
+% Recode labels as vectors containing values 0 or 1 (at the right place, ex 5 pdf)
+yVec = zeros(m, num_labels);
+for i=1:m
+  v = zeros(num_labels, 1);
+  v(y(i)) = 1;
+  yVec(i, :) = v;
+endfor;
+
+h = a2;
+term1 = yVec .* log(h);
+term2 = (1 - yVec) .* log(1 - h);
+J = (-1) * sum(sum(term1 + term2)) / m;
 
 
 
