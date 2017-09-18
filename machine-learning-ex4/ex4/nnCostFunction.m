@@ -77,10 +77,9 @@ a2 = sigmoid(z2); % size(a2) = [m 10]
 
 % Recode labels as vectors containing values 0 or 1 (at the right place, ex 5 pdf)
 yVec = zeros(m, num_labels);
+yRange = [1:num_labels]'; %' size(yRange) = [10 1]
 for i=1:m
-  v = zeros(num_labels, 1);
-  v(y(i)) = 1;
-  yVec(i, :) = v;
+  yVec(i, :) = (yRange == y(i));
 endfor;
 
 h = a2;
@@ -103,11 +102,10 @@ J = J + regTerm;
 
 Delta1 = zeros(size(Theta1)); % size(Delta1) = [25 401]
 Delta2 = zeros(size(Theta2)); % size(Delta2) = [10 26]
-yRange = [1:num_labels]'; %' size(yRange) = [10 1]
 
 for i=1:m
 
-  % Forward propagation
+  % Forward propagation (J calculation code can be reused)
   a1 = X(i, :)'; %' size(a1) = [401 1]
   z2 = Theta1 * a1; % size(z2) = [25 1]
   a2 = sigmoid(z2); % size(a2) = [25 1]
@@ -116,7 +114,7 @@ for i=1:m
   a3 = sigmoid(z3); % size(a3) = [10 1]
 
   % Backpropagation - error terms
-  delta3 = a3 - (yRange == y(i)); % size(delta3) = [10 1]
+  delta3 = a3 - (yRange == y(i, :)); % size(delta3) = [10 1]
   delta2 = (Theta2' * delta3) .* [1; sigmoidGradient(z2)]; %'size(delta2) = [26 1]
   delta2 = delta2(2:end); % Skip delta2[0], size(delta2) = [25 1]
 
