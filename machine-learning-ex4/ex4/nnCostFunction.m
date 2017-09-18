@@ -96,6 +96,38 @@ regTerm = (lambda / (2 * m)) * (sum(sum(Theta1Reg .^ 2)) + sum(sum(Theta2Reg .^ 
 J = J + regTerm;
 
 
+% Part 2 - Backpropagation
+% size(X) = [m 401]
+% size(Theta1) = [25 401]
+% size(Theta2) = [10 26]
+
+Delta1 = zeros(size(Theta1)); % size(Delta1) = [25 401]
+Delta2 = zeros(size(Theta2)); % size(Delta2) = [10 26]
+yRange = [1:num_labels]'; %' size(yRange) = [10 1]
+
+for i=1:m
+
+  % Forward propagation
+  a1 = X(i, :)'; %' size(a1) = [401 1]
+  z2 = Theta1 * a1; % size(z2) = [25 1]
+  a2 = sigmoid(z2); % size(a2) = [25 1]
+  a2 = [1; a2]; % size(a2) = [26 1]
+  z3 = Theta2 * a2; % size(z3) = [10 1]
+  a3 = sigmoid(z3); % size(a3) = [10 1]
+
+  % Backpropagation - error terms
+  delta3 = a3 - (yRange == y(i)); % size(delta3) = [10 1]
+  delta2 = (Theta2' * delta3) .* [1; sigmoidGradient(z2)]; %'size(delta2) = [26 1]
+  delta2 = delta2(2:end); % Skip delta2[0], size(delta2) = [25 1]
+
+  % Backpropagation - gradients
+  Delta2 = Delta2 + delta3 * a2'; %'
+  Delta1 = Delta1 + delta2 * a1'; %'
+endfor;
+
+Theta2_grad = (1 / m) * Delta2;
+Theta1_grad = (1 / m) * Delta1;
+
 
 
 
