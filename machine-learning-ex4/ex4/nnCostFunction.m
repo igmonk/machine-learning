@@ -123,8 +123,11 @@ for i=1:m
   Delta1 = Delta1 + delta2 * a1'; %'
 endfor;
 
-Theta2_grad = (1 / m) * Delta2;
-Theta1_grad = (1 / m) * Delta1;
+Theta2_grad_reg = (lambda / m) * [zeros(size(Theta2, 1), 1) Theta2Reg];
+Theta1_grad_reg = (lambda / m) * [zeros(size(Theta1, 1), 1) Theta1Reg];
+
+Theta2_grad = (1 / m) * Delta2 + Theta2_grad_reg;
+Theta1_grad = (1 / m) * Delta1 + Theta1_grad_reg;
 
 
 
