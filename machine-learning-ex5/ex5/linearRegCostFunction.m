@@ -25,8 +25,9 @@ errorTerm = sum(sum((h - y) .^ 2)) / (2 * m);
 regTerm = lambda * sum(thetaReg .^ 2) / (2 * m);
 J = errorTerm + regTerm;
 
-
-
+gradTheta = [0; thetaReg];
+gradRegTerm = (lambda / m) * gradTheta;
+grad = (1 / m) * (X' * (h - y)) + gradRegTerm; %'
 
 
 
