@@ -48,7 +48,8 @@ J = sum(sum(J(R == 1))) / 2; % (*)
 % J = sum(sum(J .* R)) / 2;
 % Since R has only binary values (0's and 1's)
 
-
+X_grad = ((X * Theta' - Y) .* R) * Theta; %'
+Theta_grad = ((X * Theta' - Y) .* R)' * X;
 
 
 
